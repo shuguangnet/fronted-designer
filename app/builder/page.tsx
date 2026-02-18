@@ -8,7 +8,7 @@ import type { PageContent } from "@/types";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-// 示例页面内容
+// 示例页面内容（原子化结构）
 const samplePageContent: PageContent = {
   version: "1.0",
   meta: {
@@ -24,34 +24,32 @@ const samplePageContent: PageContent = {
       {
         id: "hero-1",
         type: "hero-section",
-        props: {
-          headline: "欢迎来到我们的企业",
-          subheadline: "专业、创新、卓越",
-          description: "我们致力于为客户提供最优质的产品和服务",
-          ctaText: "了解更多",
-          ctaLink: "#",
-          alignment: "center",
-        },
+        props: { alignment: "center", minHeight: "500px" },
+        children: [
+          { id: "hero-title", type: "text", props: { variant: "h1", align: "center" }, children: [] },
+          { id: "hero-subtitle", type: "text", props: { variant: "lead", align: "center" }, children: [] },
+        ],
       },
       {
         id: "features-1",
         type: "feature-grid",
-        props: { columns: "3", title: "我们的核心优势" },
+        props: { columns: "3" },
+        children: [],
       },
       {
-        id: "cta-1",
+        id: "cta-section",
         type: "container",
         props: { maxWidth: "800px", padding: "lg" },
-        styles: { background: "hsl(var(--muted))", padding: { top: "xl", bottom: "xl" } },
+        styles: { background: "hsl(var(--muted))" },
         children: [
           {
-            id: "column-1",
+            id: "cta-column",
             type: "column",
             props: { gap: "md", align: "center" },
             children: [
-              { id: "text-1", type: "text", props: { content: "准备好开始了吗？", variant: "h2", align: "center" } },
-              { id: "text-2", type: "text", props: { content: "立即联系我们，了解更多产品信息", variant: "body", align: "center" } },
-              { id: "button-1", type: "button", props: { text: "联系我们", variant: "primary", size: "lg" } },
+              { id: "cta-title", type: "text", props: { variant: "h2", align: "center" }, children: [] },
+              { id: "cta-text", type: "text", props: { variant: "body", align: "center" }, children: [] },
+              { id: "cta-button", type: "button", props: { variant: "primary", size: "lg" }, children: [] },
             ],
           },
         ],

@@ -1,26 +1,23 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/builder-components/content/Button";
 
 interface HeroSectionProps {
-  headline: string;
-  subheadline?: string;
-  description?: string;
-  ctaText?: string;
-  ctaLink?: string;
+  children?: React.ReactNode;
   backgroundImage?: string;
   alignment?: "left" | "center" | "right";
+  overlay?: boolean;
+  overlayColor?: string;
+  minHeight?: string;
   className?: string;
 }
 
 export function HeroSection({
-  headline,
-  subheadline,
-  description,
-  ctaText = "了解更多",
-  ctaLink = "#",
+  children,
   backgroundImage,
   alignment = "center",
+  overlay = true,
+  overlayColor = "rgba(0,0,0,0.4)",
+  minHeight = "500px",
   className,
 }: HeroSectionProps) {
   const alignMap = {
@@ -29,51 +26,38 @@ export function HeroSection({
     right: "items-end text-right",
   };
 
+  const backgroundStyle = backgroundImage
+    ? {
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover" as const,
+        backgroundPosition: "center" as const,
+      }
+    : {};
+
+  const overlayStyle = overlay && backgroundImage
+    ? { backgroundColor: overlayColor }
+    : {};
+
   return (
     <section
       className={cn(
-        "relative min-h-[500px] flex items-center justify-center px-6 py-16",
+        "relative flex items-center justify-center px-6 py-16",
         alignMap[alignment],
         className
       )}
-      style={
-        backgroundImage
-          ? {
-              backgroundImage: `url(${backgroundImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }
-          : undefined
-      }
+      style={{ ...backgroundStyle, minHeight }}
     >
       {/* 背景遮罩 */}
-      {backgroundImage && (
-        <div className="absolute inset-0 bg-black/40" />
+      {overlay && backgroundImage && (
+        <div className="absolute inset-0" style={overlayStyle} />
       )}
 
       {/* 内容 */}
-      <div className="relative z-10 max-w-4xl mx-auto space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-lg">
-          {headline}
-        </h1>
-
-        {subheadline && (
-          <p className="text-xl md:text-2xl text-white/90 drop-shadow">
-            {subheadline}
-          </p>
-        )}
-
-        {description && (
-          <p className="text-lg text-white/80 drop-shadow max-w-2xl">
-            {description}
-          </p>
-        )}
-
-        {ctaText && (
-          <div className="pt-4">
-            <Button text={ctaText} href={ctaLink} variant="primary" size="lg" />
-          </div>
-        )}
+      <div className={cn(
+        "relative z-10 max-w-4xl mx-auto",
+        backgroundImage ? "space-y-6" : "space-y-4"
+      )}>
+        {children}
       </div>
     </section>
   );

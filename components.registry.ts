@@ -177,12 +177,6 @@ export const componentRegistry: Record<string, ComponentSchema> = {
     description: "文本内容",
     icon: "type",
     props: {
-      content: {
-        type: "text",
-        label: "文本内容",
-        defaultValue: "在这里输入文本...",
-        required: true,
-      },
       variant: {
         type: "select",
         label: "样式",
@@ -195,6 +189,7 @@ export const componentRegistry: Record<string, ComponentSchema> = {
           { label: "正文", value: "body" },
           { label: "小字", value: "small" },
           { label: "说明", value: "muted" },
+          { label: "导语", value: "lead" },
         ],
       },
       align: {
@@ -209,7 +204,7 @@ export const componentRegistry: Record<string, ComponentSchema> = {
         ],
       },
     },
-    acceptChildren: false,
+    acceptChildren: true,
     componentPath: "@/builder-components/content/Text",
   },
 
@@ -266,15 +261,15 @@ export const componentRegistry: Record<string, ComponentSchema> = {
     description: "按钮",
     icon: "mouse-pointer",
     props: {
-      text: { type: "string", label: "按钮文字", defaultValue: "点击", required: true },
       variant: {
-        type: "select", label: "样式", defaultValue: "default",
+        type: "select", label: "样式", defaultValue: "primary",
         options: [
           { label: "默认", value: "default" },
           { label: "主要", value: "primary" },
           { label: "次要", value: "secondary" },
           { label: "轮廓", value: "outline" },
           { label: "幽灵", value: "ghost" },
+          { label: "链接", value: "link" },
         ],
       },
       size: {
@@ -287,7 +282,7 @@ export const componentRegistry: Record<string, ComponentSchema> = {
       },
       href: { type: "string", label: "链接地址", defaultValue: "" },
     },
-    acceptChildren: false,
+    acceptChildren: true,
     componentPath: "@/builder-components/content/Button",
   },
 
@@ -362,35 +357,9 @@ export const componentRegistry: Record<string, ComponentSchema> = {
     type: "hero-section",
     category: "advanced",
     name: "Hero Section",
-    description: "英雄区，用于页面顶部展示",
+    description: "英雄区容器，用于页面顶部展示",
     icon: "layout",
     props: {
-      headline: {
-        type: "text",
-        label: "主标题",
-        defaultValue: "欢迎来到我们的网站",
-        required: true,
-      },
-      subheadline: {
-        type: "text",
-        label: "副标题",
-        defaultValue: "这里是副标题描述",
-      },
-      description: {
-        type: "text",
-        label: "描述",
-        defaultValue: "",
-      },
-      ctaText: {
-        type: "string",
-        label: "按钮文字",
-        defaultValue: "了解更多",
-      },
-      ctaLink: {
-        type: "string",
-        label: "按钮链接",
-        defaultValue: "#",
-      },
       backgroundImage: {
         type: "image",
         label: "背景图片",
@@ -405,12 +374,31 @@ export const componentRegistry: Record<string, ComponentSchema> = {
           { label: "居右", value: "right" },
         ],
       },
+      overlay: {
+        type: "select",
+        label: "背景遮罩",
+        defaultValue: "true",
+        options: [
+          { label: "开启", value: "true" },
+          { label: "关闭", value: "false" },
+        ],
+      },
+      minHeight: {
+        type: "select",
+        label: "最小高度",
+        defaultValue: "500px",
+        options: [
+          { label: "400px", value: "400px" },
+          { label: "500px", value: "500px" },
+          { label: "600px", value: "600px" },
+          { label: "700px", value: "700px" },
+        ],
+      },
     },
-    acceptChildren: false,
+    acceptChildren: true,
     componentPath: "@/builder-components/advanced/HeroSection",
     defaultStyles: {
       padding: { top: "xl", bottom: "xl" },
-      minHeight: "500px",
     },
   },
 
@@ -418,7 +406,7 @@ export const componentRegistry: Record<string, ComponentSchema> = {
     type: "feature-grid",
     category: "advanced",
     name: "Feature Grid",
-    description: "功能展示网格",
+    description: "功能展示网格容器",
     icon: "grid",
     props: {
       columns: {
@@ -431,13 +419,28 @@ export const componentRegistry: Record<string, ComponentSchema> = {
           { label: "4列", value: "4" },
         ],
       },
-      title: {
-        type: "string",
-        label: "标题",
-        defaultValue: "我们的优势",
+      showBackground: {
+        type: "select",
+        label: "显示背景",
+        defaultValue: "true",
+        options: [
+          { label: "开启", value: "true" },
+          { label: "关闭", value: "false" },
+        ],
+      },
+      padding: {
+        type: "select",
+        label: "内边距",
+        defaultValue: "lg",
+        options: [
+          { label: "无", value: "none" },
+          { label: "小", value: "sm" },
+          { label: "中", value: "md" },
+          { label: "大", value: "lg" },
+        ],
       },
     },
-    acceptChildren: false,
+    acceptChildren: true,
     componentPath: "@/builder-components/advanced/FeatureGrid",
   },
 
