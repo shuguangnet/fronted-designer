@@ -1,0 +1,227 @@
+// Prisma Schema - SQLite
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// 用户与权限
+// ============================================
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 关系
+  pages     Page[]
+  versions  PageVersion[]
+  activities Activity[]
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  USER
+}
+
+// ============================================
+// 页面核心
+// ============================================
+model Page {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  title       String
+  description String?
+  status      PageStatus  @default(DRAFT)
+
+  // SEO
+  seoTitle        String?
+  seoDescription String?
+  ogImage         String?
+
+  // 主题
+  themeId        String?
+  theme          Theme?       @relation(fields: [themeId], references: [id])
+
+  // 内容数据 (JSON)
+  content        String       // JSON 字符串存储页面结构
+
+  // 版本控制
+  publishedVersionId String?
+  publishedVersion  PageVersion? @relation("PublishedVersion", fields: [publishedVersionId], references: [id])
+  versions      PageVersion[]
+
+  // 元数据
+  authorId     String
+  author       User         @relation(fields: [authorId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  publishedAt  DateTime?
+}
+
+enum PageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ============================================
+// 页面版本
+// ============================================
+model PageVersion {
+  id        String   @id @default(cuid())
+  version   Int
+  content   String   // JSON 字符串
+  label     String?
+  changeLog String?
+
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  // 反向关系
+  publishRequests Page[] @relation("PublishedVersion")
+
+  @@unique([pageId, version])
+}
+
+// ============================================
+// 主题系统
+// ============================================
+model Theme {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String
+  description String?
+  preview     String?
+  config      String   // JSON 字符串 - 主题配置
+  customCSS   String?
+  category    String?
+  isBuiltin   Boolean  @default(false)
+  usageCount  Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  pages       Page[]
+}
+
+// ============================================
+// 组件注册
+// ============================================
+model Component {
+  id             String  @id @default(cuid())
+  type           String  @unique
+  category       String
+  name           String
+  description    String?
+  icon           String?
+  schema         String  // JSON 字符串
+  defaultProps   String  // JSON 字符串
+  componentPath  String
+  serverComponent Boolean @default(false)
+  isVisible      Boolean @default(true)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ============================================
+// 媒体库
+// ============================================
+model Media {
+  id           String      @id @default(cuid())
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+
+  // 存储
+  url          String
+  storageKey   String
+
+  // 元数据
+  alt          String?
+  caption      String?
+  tags         String      // JSON 数组字符串
+
+  // 文件夹
+  folderId     String?
+  folder       MediaFolder? @relation(fields: [folderId], references: [id])
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model MediaFolder {
+  id        String       @id @default(cuid())
+  name      String
+  parentId  String?
+  parent    MediaFolder? @relation("FolderHierarchy", fields: [parentId], references: [id])
+  children  MediaFolder[] @relation("FolderHierarchy")
+  media     Media[]
+
+  createdAt DateTime     @default(now())
+}
+
+// ============================================
+// 表单提交
+// ============================================
+model FormSubmission {
+  id        String            @id @default(cuid())
+  formId    String
+  data      String            // JSON 字符串
+  ipAddress String?
+  userAgent String?
+  status    SubmissionStatus  @default(PENDING)
+  notes     String?
+
+  createdAt DateTime          @default(now())
+}
+
+enum SubmissionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  SPAM
+}
+
+// ============================================
+// 活动日志
+// ============================================
+model Activity {
+  id          String        @id @default(cuid())
+  type        ActivityType
+  action      String
+  description String?
+  entityType  String?
+  entityId    String?
+  changes     String?       // JSON 字符串
+
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime      @default(now())
+}
+
+enum ActivityType {
+  CREATE
+  UPDATE
+  DELETE
+  PUBLISH
+  LOGIN
+}

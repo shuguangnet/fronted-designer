@@ -1,0 +1,72 @@
+import type { ThemeConfig } from "@/types";
+
+export const creativeTheme: ThemeConfig = {
+  id: "creative",
+  name: "创意主题",
+  colors: {
+    primary: "280 80% 60%",
+    secondary: "180 80% 60%",
+    accent: "320 80% 60%",
+    neutral: "240 10% 96%",
+    background: "0 0% 100%",
+    foreground: "240 10% 3.9%",
+    card: "0 0% 100%",
+    cardForeground: "240 10% 3.9%",
+    muted: "240 5% 96%",
+    mutedForeground: "240 5% 40%",
+    border: "240 5% 90%",
+    input: "240 5% 90%",
+    ring: "280 80% 60%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+  },
+  typography: {
+    fontFamily: {
+      sans: ["Poppins", "system-ui", "sans-serif"],
+    },
+    fontSize: {
+      xs: "0.75rem",
+      sm: "0.875rem",
+      base: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem",
+    },
+    fontWeight: {
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+    },
+    lineHeight: {
+      tight: 1.25,
+      normal: 1.5,
+      relaxed: 1.75,
+    },
+  },
+  spacing: {
+    xs: "0.25rem",
+    sm: "0.5rem",
+    md: "1rem",
+    lg: "1.5rem",
+    xl: "2rem",
+    "2xl": "3rem",
+  },
+  borderRadius: {
+    none: "0",
+    sm: "0.5rem",
+    md: "1rem",
+    lg: "1.5rem",
+    xl: "2rem",
+    full: "9999px",
+  },
+  shadows: {
+    sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+    md: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+    lg: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+    xl: "0 20px 25px -5px rgb(0 0 0 / 0.1)",
+  },
+};

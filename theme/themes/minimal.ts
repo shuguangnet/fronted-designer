@@ -1,0 +1,72 @@
+import type { ThemeConfig } from "@/types";
+
+export const minimalTheme: ThemeConfig = {
+  id: "minimal",
+  name: "极简主题",
+  colors: {
+    primary: "0 0% 9%",
+    secondary: "0 0% 96%",
+    accent: "0 0% 9%",
+    neutral: "0 0% 96%",
+    background: "0 0% 100%",
+    foreground: "0 0% 9%",
+    card: "0 0% 100%",
+    cardForeground: "0 0% 9%",
+    muted: "0 0% 96%",
+    mutedForeground: "0 0% 40%",
+    border: "0 0% 90%",
+    input: "0 0% 90%",
+    ring: "0 0% 9%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+  },
+  typography: {
+    fontFamily: {
+      sans: ["Inter", "system-ui", "sans-serif"],
+    },
+    fontSize: {
+      xs: "0.75rem",
+      sm: "0.875rem",
+      base: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem",
+    },
+    fontWeight: {
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+    },
+    lineHeight: {
+      tight: 1.25,
+      normal: 1.5,
+      relaxed: 1.75,
+    },
+  },
+  spacing: {
+    xs: "0.25rem",
+    sm: "0.5rem",
+    md: "1rem",
+    lg: "1.5rem",
+    xl: "2rem",
+    "2xl": "3rem",
+  },
+  borderRadius: {
+    none: "0",
+    sm: "0.125rem",
+    md: "0.25rem",
+    lg: "0.375rem",
+    xl: "0.5rem",
+    full: "9999px",
+  },
+  shadows: {
+    sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+    md: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+    lg: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+    xl: "0 10px 15px -3px rgb(0 0 0 / 0.03)",
+  },
+};
