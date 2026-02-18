@@ -1,28 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/site-header";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
-      {/* 毛玻璃导航栏 */}
-      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center text-white font-bold text-sm">
-              C
-            </div>
-            <span className="font-bold text-lg tracking-tight">ComBuilder</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/demo">
-              <Button variant="ghost" size="sm">演示</Button>
-            </Link>
-            <Link href="/builder">
-              <Button size="sm">进入构建器</Button>
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader />
 
       {/* Hero 区域 */}
       <section className="relative min-h-[85vh] flex items-center justify-center px-6">

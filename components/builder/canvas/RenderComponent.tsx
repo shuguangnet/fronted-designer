@@ -2,8 +2,8 @@
 
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
+import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import type { ComponentNode } from "@/types";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,7 @@ import { useEditorStore } from "@/store/editor";
 import { getComponentSchema } from "@/components.registry";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Copy, Trash2 } from "lucide-react";
+import { Copy, Trash2, GripVertical } from "lucide-react";
 
 // Static component imports
 import { Container } from "@/builder-components/base/Container";
@@ -112,7 +112,23 @@ export function EditableComponent({ node }: EditableComponentProps) {
   const schema = getComponentSchema(node.type);
   const acceptChildren = schema?.acceptChildren ?? false;
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const {
+    attributes,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: node.id,
+    data: { type: node.type, source: "canvas", node },
+  });
+
+  // Separate drag handle for better UX
+  const {
+    attributes: dragAttributes,
+    listeners: dragListeners,
+    setNodeRef: setDraggableRef,
+  } = useDraggable({
     id: node.id,
     data: { type: node.type, source: "canvas", node },
   });
@@ -130,7 +146,7 @@ export function EditableComponent({ node }: EditableComponentProps) {
 
   if (!Component) {
     return (
-      <div ref={setNodeRef} {...attributes} {...listeners} style={style}
+      <div ref={setNodeRef} {...attributes} style={style}
         className="p-4 border-2 border-dashed border-destructive rounded bg-destructive/10">
         <p className="text-destructive font-medium">未知组件: {node.type}</p>
       </div>
@@ -154,20 +170,34 @@ export function EditableComponent({ node }: EditableComponentProps) {
     <div
       ref={setNodeRef}
       {...attributes}
-      {...listeners}
       data-component-id={node.id}
       data-component-type={node.type}
       className={cn(
-        "component-wrapper relative cursor-pointer",
+        "component-wrapper relative group",
         isSelected && "ring-2 ring-primary ring-offset-2",
         isHovered && !isSelected && "ring-1 ring-muted-foreground ring-offset-1",
         node.visible === false && "hidden",
       )}
       style={style}
-      onClick={(e) => { e.stopPropagation(); selectComponent(node.id); }}
+      onClick={(e) => {
+        // Only select if not clicking on the drag handle or toolbar buttons
+        if (!(e.target as HTMLElement).closest(".drag-handle, button")) {
+          e.stopPropagation();
+          selectComponent(node.id);
+        }
+      }}
       onMouseEnter={() => hoverComponent(node.id)}
       onMouseLeave={() => hoverComponent(null)}
     >
+      {/* Drag handle - only visible on hover */}
+      <div
+        {...dragAttributes}
+        {...dragListeners}
+        className="drag-handle absolute -left-6 top-1/2 -translate-y-1/2 w-5 h-8 flex items-center justify-center cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 hover:bg-accent rounded transition-opacity"
+      >
+        <GripVertical className="w-3 h-3 text-muted-foreground" />
+      </div>
+
       {content}
       {isSelected && <ComponentToolbar nodeId={node.id} nodeType={node.type} />}
     </div>

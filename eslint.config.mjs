@@ -1,4 +1,4 @@
-import { FlatCompat } from "@eslint/eslintrc";
+import { FlatCompat } from "@eslint/eslintrc/dist/eslintrc.cjs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import tseslint from "typescript-eslint";
